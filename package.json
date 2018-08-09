@@ -1,0 +1,11 @@
+{
+  "name": "kolab-server",
+  "version": "1.0.0",
+  "description": "An api server for the KoLab app.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jimmy Brannon",
+  "license": "ISC"
+}
