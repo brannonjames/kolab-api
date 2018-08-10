@@ -11,6 +11,8 @@ exports.createNewUser = async (user) => {
 
     const { username, email } = user;
 
+    // throw error if fields don't exist
+    // will add more validation later
     if (!username || !email || !user.password) {
       next({
         status: 400,
@@ -18,8 +20,10 @@ exports.createNewUser = async (user) => {
       });
     }
   
+    // take incoming password and hash it 
     let password = await hash(user.password);
   
+    // actually add new user to database assuming all validation passed
     await pool.query(`
       INSERT INTO users (username, email, password)
       VALUES ($1, $2, $3);
@@ -29,6 +33,7 @@ exports.createNewUser = async (user) => {
   
   } catch (err) {
 
+    // error code 23505 comes from pg when a UNIQUE validator fails
     if (err.code === '23505') {
       throw new Error('That email already exists');
     } else {
@@ -52,8 +57,12 @@ exports.loginUser = async user => {
 
     if (foundUser) {
       let isCorrectPass = await checkPassword(password, foundUser.password);
-      if (foundUser && isCorrectPass) {
+      if (isCorrectPass) {
+
+        // create a token containing the user id and a timestamp
         let token = createToken(foundUser.id);
+
+        // return user object and token for storage on client
         return {
           token,
           id: foundUser.id,
@@ -61,9 +70,11 @@ exports.loginUser = async user => {
           email: foundUser.email
         }
       } else {
+        // throw error if incorrect password
         throw new Error('Incorrect email/password');
       }
     } else {
+      // throw same error is no user was found
       throw new Error('Incorrect email/password');
     }
   } catch (err) {

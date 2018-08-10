@@ -6,6 +6,7 @@ const SALT_ROUNDS = 10;
 exports.hash = async (dataToHash) => {
   try {
 
+    // hash incoming plain text password
     let salt = await bcrypt.genSalt(SALT_ROUNDS);
     return await bcrypt.hash(dataToHash, salt);
 

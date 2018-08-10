@@ -14,8 +14,8 @@ exports.registerUser = async (req, res, next) => {
 exports.loginUser = async (req, res, next) => {
   try {
 
-    let token = await loginUser(req.body);
-    res.send(token);
+    let user = await loginUser(req.body);
+    res.send(user);
 
   } catch (err) {
      next(err); 

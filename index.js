@@ -7,9 +7,13 @@ const PORT = process.env.PORT || 3060;
 const userRoutes = require('./app/users/routes');
 const errorRoute = require('./modules/error');
 
+// middleware
 app.use(bodyParser.json());
 
+// my defined routes
 app.use('/api/user', userRoutes);
+
+// error route to handle all application errors
 app.use(errorRoute);
 
 
