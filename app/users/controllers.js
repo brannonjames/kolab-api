@@ -8,6 +8,8 @@ exports.registerUser = async (req, res, next) => {
 
   } catch (err) {
 
+    console.log(err.status);
+
     next(err);
 
   }
