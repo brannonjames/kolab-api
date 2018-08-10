@@ -1,4 +1,4 @@
-const { createNewUser } = require('./queries');
+const { createNewUser, loginUser } = require('./queries');
 
 exports.registerUser = async (req, res, next) => {
   try {
@@ -7,10 +7,17 @@ exports.registerUser = async (req, res, next) => {
     res.sendStatus(201);
 
   } catch (err) {
-
-    console.log(err.status);
-
     next(err);
+  }
+}
 
+exports.loginUser = async (req, res, next) => {
+  try {
+
+    let token = await loginUser(req.body);
+    res.send(token);
+
+  } catch (err) {
+     next(err); 
   }
 }

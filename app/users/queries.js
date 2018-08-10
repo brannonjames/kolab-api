@@ -1,13 +1,15 @@
 const pool = require('../../config/database');
-const { hash } = require('../../modules/bcrypt');
+const {
+  hash,
+  checkPassword,
+  createToken
+} = require('../../modules/auth');
 
 
 exports.createNewUser = async (user) => {
   try {
-    const {
-      username,
-      email
-    } = user;
+
+    const { username, email } = user;
 
     if (!username || !email || !user.password) {
       next({
@@ -23,14 +25,6 @@ exports.createNewUser = async (user) => {
       VALUES ($1, $2, $3);
     `, [username, email, password]);
 
-    let newUser = await pool.query(`
-      SELECT * FROM users
-      WHERE username = $1
-      AND email = $2
-      AND password = $3;
-    `, [username, email, password]);
-
-
     return true;
   
   } catch (err) {
@@ -38,8 +32,41 @@ exports.createNewUser = async (user) => {
     if (err.code === '23505') {
       throw new Error('That email already exists');
     } else {
-      return Error('uh oh');
+      throw new Error(err.message);
     }
 
+  }
+}
+
+exports.loginUser = async user => {
+  try {
+
+    const { email, password } = user;
+
+    let { rows } = await pool.query(`
+      SELECT * from users
+      WHERE email = $1;
+    `, [email]);
+
+    const foundUser = rows[0];
+
+    if (foundUser) {
+      let isCorrectPass = await checkPassword(password, foundUser.password);
+      if (foundUser && isCorrectPass) {
+        let token = createToken(foundUser.id);
+        return {
+          token,
+          id: foundUser.id,
+          username: foundUser.username,
+          email: foundUser.email
+        }
+      } else {
+        throw new Error('Incorrect email/password');
+      }
+    } else {
+      throw new Error('Incorrect email/password');
+    }
+  } catch (err) {
+    throw new Error(err.message);
   }
 }
