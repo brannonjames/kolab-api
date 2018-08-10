@@ -31,11 +31,7 @@ exports.createNewUser = async (user) => {
     `, [username, email, password]);
 
 
-    return {
-      id: newUser.rows[0].id,
-      username: newUser.rows[0].username,
-      email: newUser.rows[0].email
-    }
+    return true;
   
   } catch (err) {
 
