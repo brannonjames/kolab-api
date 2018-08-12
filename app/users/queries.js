@@ -71,7 +71,10 @@ exports.loginUser = async user => {
         }
       } else {
         // throw error if incorrect password
-        throw new Error('Incorrect email/password');
+        let error = new Error('Incorrect email/password');
+        error.status = 499;
+        console.log(error);
+        throw error;
       }
     } else {
       // throw same error is no user was found
@@ -79,5 +82,20 @@ exports.loginUser = async user => {
     }
   } catch (err) {
     throw new Error(err.message);
+  }
+}
+
+exports.getUser = async id => {
+  try {
+
+    let { rows } = await pool.query(`
+      SELECT id, username, email FROM users
+      WHERE id = $1;
+    `, [id]);
+
+    return rows[0];
+
+  } catch (err) {
+    console.log(err);
   }
 }
