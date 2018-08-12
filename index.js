@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const PORT = process.env.PORT || 3060;
 
 const userRoutes = require('./app/users/routes');
+const projectRoutes = require('./app/projects/routes');
 const { handleAuth } = require('./app/middleware/auth');
 const FOFRoute = require('./modules/FOFRoute');
 const errorRoute = require('./modules/error');
@@ -16,7 +17,8 @@ app.use(bodyParser.json());
 app.use(handleAuth);
 
 // my defined routes
-app.use('/api/user', userRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/projects', projectRoutes);
 
 // route to handle any 404s
 app.use(FOFRoute);

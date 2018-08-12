@@ -25,7 +25,7 @@ exports.createNewUser = async (user) => {
   
     // actually add new user to database assuming all validation passed
     await pool.query(`
-      INSERT INTO users (username, email, password)
+      INSERT INTO "user" (username, email, password)
       VALUES ($1, $2, $3);
     `, [username, email, password]);
 
@@ -49,7 +49,7 @@ exports.loginUser = async user => {
     const { email, password } = user;
 
     let { rows } = await pool.query(`
-      SELECT * from users
+      SELECT * from "user"
       WHERE email = $1;
     `, [email]);
 
@@ -89,7 +89,7 @@ exports.getUser = async id => {
   try {
 
     let { rows } = await pool.query(`
-      SELECT id, username, email FROM users
+      SELECT id, username, email FROM "user"
       WHERE id = $1;
     `, [id]);
 
