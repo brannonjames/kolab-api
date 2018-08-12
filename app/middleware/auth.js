@@ -1,23 +1,73 @@
 const jwt = require('jwt-simple');
 const { getUser } = require('../users/queries');
 
+// application level middleware
+
+exports.handleAuth = async (req, res, next) => {
+  try {
+
+    if (req.headers.authorization) {
+      const token = req.headers.authorization.split(' ')[1];
+      const { sub } = jwt.decode(token, process.env.JWT_KEY);
+      const user = await getUser(sub);
+
+      if (!user) { throw Error() }
+
+      req.user = user;
+      req.isAuthenticated = true;
+  
+    } else {
+
+      req.user = null;
+      req.isAuthenticated = false;
+
+    }
+
+    next();
+
+  } catch (err) {
+    next({
+      message: 'Authorization Error',
+      status: 401
+    });
+  }
+}
+
+// route level middleware
+
+exports.ensureLoggedIn = async (req, res, next) => {
+  try {
+
+    if (req.isAuthenticated) {
+      next();
+    } else {
+      next({
+        message: 'Authorization Error',
+        status: 401
+      });
+    }
+     
+
+  } catch (err) {
+    next(err);
+  }
+}
+
 exports.checkIdentity = async (req, res, next) => {
   try {
 
-    const token = req.headers.authorization.split(" ")[1];
-    const decoded = jwt.decode(token, process.env.JWT_KEY);
-    let user = await getUser(req.params.user_id);
+    if (req.user.id === parseInt(req.params.user_id)) {
 
-    if (!user) {
-      next({ message: 'user not found', status: 400 });
+      next();
+
+    } else {
+
+      next({
+        message: 'Authorization Error',
+        status: 401
+      });
+
     }
-
-    if (decoded.sub !== user.id) {
-      next({ message: 'You are not authorized to do that' });
-    }
-
-    res.locals.user = user;
-    next();
 
   } catch (err) {
     next(err);

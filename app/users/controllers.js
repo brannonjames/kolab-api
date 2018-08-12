@@ -22,7 +22,6 @@ exports.loginUser = async (req, res, next) => {
   }
 }
 
-exports.getLoggedInUser = async (req, res, next) => {
-  const { user } = res.locals;
-  res.send(user);
+exports.getLoggedInUser = (req, res, next) => {
+  res.send(req.user);
 }
