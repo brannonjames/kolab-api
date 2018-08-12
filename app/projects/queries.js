@@ -49,3 +49,18 @@ exports.createProject = async project => {
     throw new Error(err.message);
   }
 }
+
+exports.createProjectView = async (project_id, id, liked) => {
+  try {
+
+    await pool.query(`
+      INSERT INTO project_user (project_id, user_id, collaborator)
+      VALUES ($1, $2, $3);
+    `, [project_id, id, liked]);
+
+    return true;
+
+  } catch (err) {
+    throw new Error(err.message);
+  }
+}
