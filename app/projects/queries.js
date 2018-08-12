@@ -20,6 +20,20 @@ exports.findAllProjectsNotViewed = async userId => {
   }
 }
 
+exports.findAllProjects = async () => {
+  try {
+
+    let { rows } = await pool.query(`
+      SELECT * FROM project;
+    `);
+
+    return rows;
+
+  } catch(err) {
+    throw new Error(err.message);
+  }
+}
+
 exports.createProject = async project => {
   try {
     const { title, technologies, description } = project;

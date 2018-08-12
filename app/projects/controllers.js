@@ -1,9 +1,10 @@
-const { findAllProjectsNotViewed, createProject } = require('./queries');
+const { findAllProjectsNotViewed, findAllProjects, createProject } = require('./queries');
 
 exports.getProjects = async (req, res, next) => {
   try {
 
     // find all the projects the user hasn't seen before
+    // switch to findAllProjects() to get projects without filtering
     let projects = await findAllProjectsNotViewed(req.user.id);
 
     if (projects.length === 0) {
