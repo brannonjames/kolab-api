@@ -34,16 +34,24 @@ exports.findAllProjects = async () => {
   }
 }
 
-exports.createProject = async project => {
+exports.createProject = async (project, userId) => {
   try {
     const { title, technologies, description } = project;
   
-    await pool.query(`
+    let query = await pool.query(`
       INSERT INTO project (title, technologies, description)
-      VALUES ($1, $2, $3);
+      VALUES ($1, $2, $3)
+      RETURNING *;
     `, [title, technologies, description]);
 
-    return true;
+    const newProject = query.rows[0];
+
+    await pool.query(`
+      INSERT INTO project_user (project_id, user_id, collaborator, owner)
+      VALUES ($1, $2, $3, $4);
+    `, [newProject.id, userId, true, true]);
+
+    return newProject;
 
   } catch (err) {
     throw new Error(err.message);

@@ -31,7 +31,7 @@ exports.getProjects = async (req, res, next) => {
 exports.postProject = async (req, res, next) => {
   try {
 
-    await createProject(req.body);
+    await createProject(req.body, req.user.id);
     res.sendStatus(201);
 
   } catch (err) {
