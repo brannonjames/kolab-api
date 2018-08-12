@@ -1,5 +1,7 @@
 const pool = require('../../config/database');
 
+// the initial plan for the app is to load all the projects the current user has not seen
+// so this query method filters out any seen projects based on the current user's id
 exports.findAllProjectsNotViewed = async userId => {
   try {
 
@@ -20,6 +22,7 @@ exports.findAllProjectsNotViewed = async userId => {
   }
 }
 
+// Mostly just in case I find a reason to load all of the projects
 exports.findAllProjects = async () => {
   try {
 
@@ -34,6 +37,8 @@ exports.findAllProjects = async () => {
   }
 }
 
+// creates the projects, and adds a row to the project_user junction table based
+// on the current user's id
 exports.createProject = async (project, userId) => {
   try {
     const { title, technologies, description } = project;
@@ -58,6 +63,8 @@ exports.createProject = async (project, userId) => {
   }
 }
 
+// insets a 'view' into the project_user table
+// this is to keep track of project views, collaborators, and creators
 exports.createProjectView = async (project_id, id, liked) => {
   try {
 

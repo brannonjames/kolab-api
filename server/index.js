@@ -6,14 +6,14 @@ const PORT = process.env.PORT || 3060;
 
 const userRoutes = require('./app/users/routes');
 const projectRoutes = require('./app/projects/routes');
-const { handleAuth } = require('./app/middleware/auth');
-const FOFRoute = require('./modules/FOFRoute');
-const errorRoute = require('./modules/error');
+const { handleAuth } = require('./middleware/auth');
+const notFound = require('./middleware/notFound');
+const error = require('./middleware/error');
 
 // middleware
 app.use(bodyParser.json());
 
-// my own middleware for handling auth requests
+// my own middleware module for handling auth requests
 app.use(handleAuth);
 
 // my defined routes
@@ -21,10 +21,10 @@ app.use('/api/users', userRoutes);
 app.use('/api/projects', projectRoutes);
 
 // route to handle any 404s
-app.use(FOFRoute);
+app.use(notFound);
 
 // error route to handle all application errors
-app.use(errorRoute);
+app.use(error);
 
 
 // Run server

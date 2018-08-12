@@ -1,8 +1,9 @@
 const jwt = require('jwt-simple');
-const { getUser } = require('../users/queries');
+const { getUser } = require('../app/users/queries');
 
 // application level middleware
 
+// decode incoming token, set authenticated user as req.user
 exports.handleAuth = async (req, res, next) => {
   try {
 
@@ -13,6 +14,8 @@ exports.handleAuth = async (req, res, next) => {
 
       if (!user) { throw Error() }
 
+      // put current user onto request object for the rest of
+      // the middleware to use
       req.user = user;
       req.isAuthenticated = true;
   
@@ -35,6 +38,8 @@ exports.handleAuth = async (req, res, next) => {
 
 // route level middleware
 
+// still deciding where/if I even want to keep this
+// might not be needed with the application level auth middleware
 exports.ensureLoggedIn = async (req, res, next) => {
   try {
 
@@ -53,6 +58,9 @@ exports.ensureLoggedIn = async (req, res, next) => {
   }
 }
 
+
+// when a user refreshes/updates their information this ensures
+// they can only retrieve their own information 
 exports.checkIdentity = async (req, res, next) => {
   try {
 
