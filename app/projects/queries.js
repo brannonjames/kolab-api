@@ -19,3 +19,19 @@ exports.findAllProjectsNotViewed = async userId => {
     throw new Error(err.message);
   }
 }
+
+exports.createProject = async project => {
+  try {
+    const { title, technologies, description } = project;
+  
+    await pool.query(`
+      INSERT INTO project (title, technologies, description)
+      VALUES ($1, $2, $3);
+    `, [title, technologies, description]);
+
+    return true;
+
+  } catch (err) {
+    throw new Error(err.message);
+  }
+}

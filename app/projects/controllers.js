@@ -1,4 +1,4 @@
-const { findAllProjectsNotViewed } = require('./queries');
+const { findAllProjectsNotViewed, createProject } = require('./queries');
 
 exports.getProjects = async (req, res, next) => {
   try {
@@ -16,6 +16,17 @@ exports.getProjects = async (req, res, next) => {
     } else {
       res.send(projects);
     }
+
+  } catch (err) {
+    next(err);
+  }
+}
+
+exports.postProject = async (req, res, next) => {
+  try {
+
+    await createProject(req.body);
+    res.sendStatus(201);
 
   } catch (err) {
     next(err);
