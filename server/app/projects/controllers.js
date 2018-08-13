@@ -1,8 +1,8 @@
 const { 
   findAllProjectsNotViewed,
   createProject,
-  createProjectView
-  
+  createProjectView,
+  updateProject
 } = require('./queries');
 
 exports.getProjects = async (req, res, next) => {
@@ -48,6 +48,17 @@ exports.postProjectView = async (req, res, next) => {
 
     await createProjectView(project_id, id, liked);
     res.sendStatus(201);
+
+  } catch (err) {
+    next(err);
+  }
+}
+
+exports.putProject = async (req, res, next) => {
+  try {
+
+    let updatedProject = await updateProject(req.body);
+    res.send(updatedProject);
 
   } catch (err) {
     next(err);

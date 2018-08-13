@@ -1,5 +1,6 @@
 const jwt = require('jwt-simple');
 const { getUser } = require('../app/users/queries');
+const { checkOwnerStatus } = require('../app/projects/queries');
 
 // application level middleware
 
@@ -75,6 +76,25 @@ exports.checkIdentity = async (req, res, next) => {
         status: 401
       });
 
+    }
+
+  } catch (err) {
+    next(err);
+  }
+}
+
+exports.ensureProjectOwner = async (req, res, next) => {
+  try {
+
+    let isOwner = await checkOwnerStatus(req.user.id, req.params.project_id);
+    
+    if (isOwner) {
+      next();
+    } else {
+      next({
+        message: 'Authorization Error',
+        status: 401
+      });
     }
 
   } catch (err) {

@@ -79,3 +79,43 @@ exports.createProjectView = async (project_id, id, liked) => {
     throw new Error(err.message);
   }
 }
+
+exports.checkOwnerStatus = async (userId, projectId) => {
+  try {
+
+    let { rows } = await pool.query(`
+      SELECT owner FROM project_user
+      WHERE user_id = $1
+      AND project_id = $2;
+    `, [userId, projectId]);
+
+    if (rows[0] && rows[0].owner) {
+      return true;
+    } else {
+      return false;
+    }
+
+  } catch (err) {
+    throw new Error(err.message);
+  }
+}
+
+exports.updateProject = async project => {
+  try {
+    const { id, title, technologies, description } = project;
+
+    let { rows } = await pool.query(`
+      UPDATE project
+      SET title = $1,
+          technologies = $2,
+          description = $3
+      WHERE id = $4
+      RETURNING *;   
+    `, [title, technologies, description, id]);
+
+    return rows[0];
+
+  } catch (err) {
+    throw new Error(err.message);
+  }
+}
