@@ -119,3 +119,24 @@ exports.updateProject = async project => {
     throw new Error(err.message);
   }
 }
+
+exports.removeProject = async id => {
+  try {
+
+    await pool.query(`
+      DELETE FROM project_user
+      WHERE project_id = $1;
+    `, [id]);
+
+    let { rows } = await pool.query(`
+      DELETE FROM project
+      WHERE id = $1
+      RETURNING id; 
+    `, [id]);
+
+    return rows[0];
+
+  } catch (err) {
+    throw new Error(err.message);
+  }
+}

@@ -2,7 +2,8 @@ const {
   findAllProjectsNotViewed,
   createProject,
   createProjectView,
-  updateProject
+  updateProject,
+  removeProject
 } = require('./queries');
 
 exports.getProjects = async (req, res, next) => {
@@ -59,6 +60,17 @@ exports.putProject = async (req, res, next) => {
 
     let updatedProject = await updateProject(req.body);
     res.send(updatedProject);
+
+  } catch (err) {
+    next(err);
+  }
+}
+
+exports.deleteProject = async (req, res, next) => {
+  try {
+
+    let deletedProjectId = await removeProject(req.params.project_id);
+    res.send(deletedProjectId);
 
   } catch (err) {
     next(err);
