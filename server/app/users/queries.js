@@ -14,10 +14,7 @@ exports.createNewUser = async (user) => {
     // throw error if fields don't exist
     // will add more validation later
     if (!username || !email || !user.password) {
-      next({
-        status: 400,
-        messages: 'Username, Email, and Password required'
-      });
+      throw new Error('Username, Email, and Password required');
     }
   
     // take incoming password and hash it 

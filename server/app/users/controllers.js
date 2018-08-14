@@ -14,6 +14,7 @@ exports.registerUser = async (req, res, next) => {
 exports.loginUser = async (req, res, next) => {
   try {
 
+    console.log(req.body);
     let user = await loginUser(req.body);
     res.send(user);
 
