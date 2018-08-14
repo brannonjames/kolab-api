@@ -70,7 +70,6 @@ exports.loginUser = async user => {
         // throw error if incorrect password
         let error = new Error('Incorrect email/password');
         error.status = 499;
-        console.log(error);
         throw error;
       }
     } else {
@@ -93,6 +92,6 @@ exports.getUser = async id => {
     return rows[0];
 
   } catch (err) {
-    console.log(err);
+    throw new Error(err.message);
   }
 }
