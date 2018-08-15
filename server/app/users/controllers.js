@@ -1,4 +1,4 @@
-const { createNewUser, loginUser } = require('./queries');
+const { createNewUser, loginUser, findUserProjects } = require('./queries');
 
 exports.registerUser = async (req, res, next) => {
   try {
@@ -24,4 +24,16 @@ exports.loginUser = async (req, res, next) => {
 
 exports.getLoggedInUser = (req, res, next) => {
   res.send(req.user);
+}
+
+exports.getUserProjects = async (req, res, next) => {
+  try {
+
+    let projects = await findUserProjects(req.user.id);
+    res.send(projects);
+
+  } catch (err) {
+
+    next(err);
+  }
 }

@@ -95,3 +95,21 @@ exports.getUser = async id => {
     throw new Error(err.message);
   }
 }
+
+exports.findUserProjects = async userId => {
+  try {
+
+    let { rows } = await pool.query(`
+      SELECT project.id, project.title, project.technologies, project.description 
+      FROM project, project_user
+      WHERE project_user.project_id = project.id
+      AND project_user.collaborator = TRUE
+      AND project_user.user_id = $1;
+    `, [userId]);
+
+    return rows;
+
+  } catch (err) {
+    throw new Error(err.message);
+  }
+}

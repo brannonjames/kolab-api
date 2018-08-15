@@ -13,16 +13,7 @@ exports.getProjects = async (req, res, next) => {
     // switch to findAllProjects() to get projects without filtering
     let projects = await findAllProjectsNotViewed(req.user.id);
 
-    if (projects.length === 0) {
-      // for rendering a 'no more cards' card on the swipe deck
-      res.send([{
-        title: 'No more projects',
-        description: 'Maybe try creating a new one :)'
-      }]);
-
-    } else {
-      res.send(projects);
-    }
+    res.send(projects);
 
   } catch (err) {
     next(err);
