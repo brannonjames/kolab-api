@@ -38,8 +38,8 @@ exports.postProjectView = async (req, res, next) => {
     const { liked } = req.query;
     const { id } = req.user;
 
-    await createProjectView(project_id, id, liked);
-    res.sendStatus(201);
+    let project = await createProjectView(project_id, id, liked);
+    res.send(project);
 
   } catch (err) {
     next(err);

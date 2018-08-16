@@ -73,7 +73,12 @@ exports.createProjectView = async (project_id, id, liked) => {
       VALUES ($1, $2, $3);
     `, [project_id, id, liked]);
 
-    return true;
+    let { rows } = await pool.query(`
+      SELECT * FROM project
+      WHERE id = $1;
+    `, [project_id]);
+
+    return rows[0];
 
   } catch (err) {
     throw new Error(err.message);
