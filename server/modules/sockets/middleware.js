@@ -23,17 +23,26 @@ exports.ensureLoggedIn = jwtAuth.authenticate({ secret: secret }, async (payload
 });
 
 exports.ensureProjectCollaborator = async (socket, next) => {
-  const user = socket.request.user
-  const projectId = socket.handshake.query.project_id;
+  try {
 
-  let isProjectCollaborator = await checkCollaboratorStatus(user.id, projectId);
+    const user = socket.request.user
+    const projectId = socket.handshake.query.project_id;
   
-  if (user.logged_in && isProjectCollaborator) {
+    let isProjectCollaborator = await checkCollaboratorStatus(user.id, projectId);
     
-    socket.join(projectId);
-    next();
+    if (user.logged_in && isProjectCollaborator) {
+  
+      socket.join(projectId);
+      next();
+  
+    } else {
 
-  } else {
-    next('Couldn\'t establish connection');
+      next('Couldn\'t establish connection');
+      
+    }
+
+  } catch (err) {
+
+    throw new Error(err.message);
   }
 }

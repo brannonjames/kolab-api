@@ -111,15 +111,15 @@ exports.checkCollaboratorStatus = async (userId, projectId) => {
     let { rows } = await pool.query(`
       SELECT collaborator FROM project_user
       WHERE user_id = $1
-      AND project_id = $2;
+      AND project_id = $2
+      AND collaborator = TRUE;
     `, [userId, projectId])
 
     if (rows[0] && rows[0].collaborator) {
-      return rows[0].collaborator;
+      return true;
     } else {
-      throw Error();
+      return false;
     }
-    
 
   } catch (err) {
     throw new Error(err.message);
