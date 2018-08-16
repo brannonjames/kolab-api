@@ -105,6 +105,27 @@ exports.checkOwnerStatus = async (userId, projectId) => {
   }
 }
 
+exports.checkCollaboratorStatus = async (userId, projectId) => {
+  try {
+
+    let { rows } = await pool.query(`
+      SELECT collaborator FROM project_user
+      WHERE user_id = $1
+      AND project_id = $2;
+    `, [userId, projectId])
+
+    if (rows[0] && rows[0].collaborator) {
+      return rows[0].collaborator;
+    } else {
+      throw Error();
+    }
+    
+
+  } catch (err) {
+    throw new Error(err.message);
+  }
+}
+
 exports.updateProject = async project => {
   try {
     const { id, title, technologies, description } = project;

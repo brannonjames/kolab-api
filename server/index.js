@@ -10,6 +10,8 @@ const { handleAuth } = require('./middleware/auth');
 const notFound = require('./middleware/notFound');
 const error = require('./middleware/error');
 
+const initializeSocketIo = require('./modules/sockets');
+
 // middleware
 app.use(bodyParser.json());
 
@@ -31,3 +33,5 @@ app.use(error);
 const server = app.listen(PORT, () => {
   console.log('KoLab server running on port ', PORT);
 });
+
+initializeSocketIo(server);
