@@ -7,7 +7,7 @@ if (process.env.DATABASE_URL) {
 
   // config condional to run on heroku
 
-  const params = url.parse('postgresql-infinite-65785');
+  const params = url.parse(process.env.DATABASE_URL);
   const auth = params.auth.split(':');
 
   config = {
