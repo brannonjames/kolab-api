@@ -18,6 +18,7 @@ exports.loginUser = async (req, res, next) => {
     res.send(user);
 
   } catch (err) {
+
      next(err); 
   }
 }

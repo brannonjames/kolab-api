@@ -10,6 +10,16 @@ const MESSAGES = [
   { text: 'Hello third message', user: 'Jimmy', id: 2 }
 ]
 
+let CURRENT_ID = 3;
+
+class Message {
+  constructor(text){
+    this.text = text;
+    this.user = 'Jimmy',
+    this.id = CURRENT_ID + 1
+  }
+}
+
 module.exports = server => {
   io.listen(server);
 
@@ -22,6 +32,17 @@ module.exports = server => {
 
         socket.on('load_initial_messages', () => {
           io.to(room).emit('load_initial_messages_success', MESSAGES);
+        });
+
+        socket.on('send_message', message => {
+
+          let newMessage = new Message(message);
+          console.log(newMessage)
+          MESSAGES.push(newMessage);
+
+          CURRENT_ID++
+
+          io.to(room).emit('send_message_success', newMessage);
         });
 
       } catch (err) {
