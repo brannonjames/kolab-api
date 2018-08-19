@@ -141,7 +141,10 @@ exports.updateProject = async project => {
       RETURNING *;   
     `, [title, technologies, description, id]);
 
-    return rows[0];
+    updatedProject = rows[0];
+    updatedProject.technologies = updatedProject.technologies.map(tech => JSON.parse(tech));
+
+    return updatedProject;
 
   } catch (err) {
     throw new Error(err.message);
