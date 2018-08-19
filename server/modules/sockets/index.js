@@ -1,11 +1,10 @@
-const io = require('socket.io')();
 const { ensureLoggedIn, ensureProjectCollaborator } = require('./middleware');
 const { createMessage, findMessages } = require('../../app/chat/queries');
 
-io.use(ensureLoggedIn);
-io.use(ensureProjectCollaborator);
-
 module.exports = io => {
+
+  io.use(ensureLoggedIn);
+  io.use(ensureProjectCollaborator);
 
   io.sockets.on('connection', socket => {
     console.log('connection')
