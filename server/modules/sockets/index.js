@@ -3,8 +3,8 @@ const { createMessage, findMessages } = require('../../app/chat/queries');
 
 module.exports = io => {
 
-  io.use(ensureLoggedIn);
-  io.use(ensureProjectCollaborator);
+  // io.use(ensureLoggedIn);
+  // io.use(ensureProjectCollaborator);
 
   io.sockets.on('connection', socket => {
     console.log('connection')
