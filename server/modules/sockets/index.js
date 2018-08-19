@@ -5,9 +5,7 @@ const { createMessage, findMessages } = require('../../app/chat/queries');
 io.use(ensureLoggedIn);
 io.use(ensureProjectCollaborator);
 
-module.exports = server => {
-  io.listen(server);
-
+module.exports = io => {
 
   io.on('connection', socket => {
     console.log('connection')
