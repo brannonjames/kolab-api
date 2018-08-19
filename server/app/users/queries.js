@@ -115,10 +115,10 @@ exports.findUserProjects = async (userId, created) => {
     const projects = rows.map(row => {
       return {
         ...row,
-        technologies: row.technologies.map(tech => {
-          console.log(JSON.parse(tech));
-          return JSON.parse(tech)
-        })
+        // technologies: row.technologies.map(tech => {
+        //   console.log(JSON.parse(tech));
+        //   return JSON.parse(tech)
+        // })
       };
     });
 
