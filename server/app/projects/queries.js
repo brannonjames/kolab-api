@@ -36,7 +36,7 @@ exports.findAllProjects = async () => {
 
     const projects = rows.map(row => ({
       ...row,
-      // technologies: row.technologies.map(tech => JSON.parse(tech))
+      technologies: JSON.parse(row.technologies)
     }));
 
     return projects;
