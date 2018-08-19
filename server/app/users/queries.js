@@ -112,19 +112,13 @@ exports.findUserProjects = async (userId, created) => {
       AND project_user.user_id = $1;
     `, [userId]);
 
-    // const projects = rows.map(row => {
-    //   return {
-    //     ...row,
-    //     technologies: row.technologies.map(tech => {
-    //       console.log(JSON.parse(tech));
-    //       return JSON.parse(tech)
-    //     })
-    //   };
-    // });
+    const projects = rows.map(row => ({
+      ...row,
+      technologies: JSON.parse(row.technologies)
+    }));
 
-    
-
-    return rows
+    console.log(projects);
+    return projects;
 
   } catch (err) {
     throw new Error(err.message);

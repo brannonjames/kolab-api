@@ -29,7 +29,7 @@ module.exports = server => {
         });
 
       } catch (err) {
-        console.log(err);
+        
         io.to(room).emit('error', err.message);
 
       }

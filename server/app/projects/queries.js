@@ -17,7 +17,7 @@ exports.findAllProjectsNotViewed = async userId => {
 
     const projects = rows.map(row => ({
       ...row,
-      // technologies: row.technologies.map(tech => JSON.parse(tech))
+      technologies: JSON.parse(row.technologies)
     }));
     return projects;
 
@@ -50,13 +50,16 @@ exports.findAllProjects = async () => {
 // on the current user's id
 exports.createProject = async (project, userId) => {
   try {
-    const { title, technologies, description } = project;
+    const { title, description } = project;
+
+    project.technologies = JSON.stringify(project.technologies);
+
   
     let query = await pool.query(`
       INSERT INTO project (title, technologies, description)
       VALUES ($1, $2, $3)
       RETURNING *;
-    `, [title, technologies, description]);
+    `, [title, project.technologies, description]);
 
     const newProject = query.rows[0];
 
@@ -65,7 +68,7 @@ exports.createProject = async (project, userId) => {
       VALUES ($1, $2, $3, $4);
     `, [newProject.id, userId, true, true]);
 
-    // newProject.technologies = newProject.technologies.map(tech => JSON.parse(tech));
+    newProject.technologies = JSON.parse(newProject.technologies);
 
     return newProject;
 
@@ -89,7 +92,10 @@ exports.createProjectView = async (project_id, id, liked) => {
       WHERE id = $1;
     `, [project_id]);
 
-    return rows[0];
+    const project = rows[0];
+    project.technologies = JSON.parse(project.technologies);
+
+    return project;
 
   } catch (err) {
     throw new Error(err.message);
@@ -139,7 +145,9 @@ exports.checkCollaboratorStatus = async (userId, projectId) => {
 
 exports.updateProject = async project => {
   try {
-    const { id, title, technologies, description } = project;
+    const { id, title, description } = project;
+
+    project.technologies = JSON.stringify(project.technologies);
 
     let { rows } = await pool.query(`
       UPDATE project
@@ -148,10 +156,10 @@ exports.updateProject = async project => {
           description = $3
       WHERE id = $4
       RETURNING *;   
-    `, [title, technologies, description, id]);
+    `, [title, project.technologies, description, id]);
 
-    updatedProject = rows[0];
-    // updatedProject.technologies = updatedProject.technologies.map(tech => JSON.parse(tech));
+    const updatedProject = rows[0];
+    updatedProject.technologies = JSON.parse(updatedProject.technologies);
 
     return updatedProject;
 

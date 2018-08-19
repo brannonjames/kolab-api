@@ -33,8 +33,7 @@ exports.getUserProjects = async (req, res, next) => {
     const created = (req.query.created == 'true');
 
     let projects = await findUserProjects(req.user.id, created);
-    console.log(projects);
-    res.json(projects);
+    res.send(projects);
 
   } catch (err) {
 
