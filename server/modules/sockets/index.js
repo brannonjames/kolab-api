@@ -10,8 +10,11 @@ module.exports = server => {
 
 
   io.on('connection', socket => {
+    console.log('connection')
     socket.on('subscribe', ({ room, token }) => {
       try {
+
+        console.log('subscribe');
 
         io.to(room).emit('subscribe_successful');
 
