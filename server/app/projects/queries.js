@@ -19,7 +19,6 @@ exports.findAllProjectsNotViewed = async userId => {
       ...row,
       // technologies: row.technologies.map(tech => JSON.parse(tech))
     }));
-
     return projects;
 
   } catch(err) {
