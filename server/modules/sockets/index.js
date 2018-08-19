@@ -6,7 +6,7 @@ module.exports = io => {
   // io.use(ensureLoggedIn);
   // io.use(ensureProjectCollaborator);
 
-  io.sockets.on('connection', socket => {
+  io.on('connection', socket => {
     console.log('connection')
     socket.on('subscribe', ({ room, token }) => {
       try {
