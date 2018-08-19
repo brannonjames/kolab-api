@@ -56,6 +56,8 @@ exports.createProject = async (project, userId) => {
       VALUES ($1, $2, $3, $4);
     `, [newProject.id, userId, true, true]);
 
+    newProject.technologies = newProject.technologies.map(tech => JSON.parse(tech));
+
     return newProject;
 
   } catch (err) {

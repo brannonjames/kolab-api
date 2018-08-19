@@ -96,18 +96,30 @@ exports.getUser = async id => {
   }
 }
 
-exports.findUserProjects = async userId => {
+exports.findUserProjects = async (userId, created) => {
   try {
 
     let { rows } = await pool.query(`
       SELECT project.id, project.title, project.technologies, project.description 
-      FROM project, project_user
-      WHERE project_user.project_id = project.id
-      AND project_user.collaborator = TRUE
+      FROM project
+      LEFT OUTER JOIN project_user
+      ON project_user.project_id = project.id
+      ${
+        created ? 
+        'WHERE project_user.owner = TRUE AND project_user.collaborator = TRUE' : 
+        'WHERE project_user.collaborator = TRUE'
+      }
       AND project_user.user_id = $1;
     `, [userId]);
 
-    return rows;
+    const projects = rows.map(row => {
+      return {
+        ...row,
+        technologies: row.technologies.map(tech => JSON.parse(tech))
+      };
+    });
+
+    return projects;
 
   } catch (err) {
     throw new Error(err.message);

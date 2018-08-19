@@ -30,7 +30,9 @@ exports.getLoggedInUser = (req, res, next) => {
 exports.getUserProjects = async (req, res, next) => {
   try {
 
-    let projects = await findUserProjects(req.user.id);
+    const created = (req.query.created == 'true');
+
+    let projects = await findUserProjects(req.user.id, created);
     res.send(projects);
 
   } catch (err) {
