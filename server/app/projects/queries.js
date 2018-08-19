@@ -15,7 +15,12 @@ exports.findAllProjectsNotViewed = async userId => {
       );
     `, [userId]);
 
-    return rows;
+    const projects = rows.map(row => ({
+      ...row,
+      technologies: row.technologies.map(tech => JSON.parse(tech))
+    }));
+
+    return projects;
 
   } catch(err) {
     throw new Error(err.message);
@@ -30,7 +35,12 @@ exports.findAllProjects = async () => {
       SELECT * FROM project;
     `);
 
-    return rows;
+    const projects = rows.map(row => ({
+      ...row,
+      technologies: row.technologies.map(tech => JSON.parse(tech))
+    }));
+
+    return projects;
 
   } catch(err) {
     throw new Error(err.message);
