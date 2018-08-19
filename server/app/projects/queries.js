@@ -17,7 +17,7 @@ exports.findAllProjectsNotViewed = async userId => {
 
     const projects = rows.map(row => ({
       ...row,
-      technologies: row.technologies.map(tech => JSON.parse(tech))
+      // technologies: row.technologies.map(tech => JSON.parse(tech))
     }));
 
     return projects;
@@ -37,7 +37,7 @@ exports.findAllProjects = async () => {
 
     const projects = rows.map(row => ({
       ...row,
-      technologies: row.technologies.map(tech => JSON.parse(tech))
+      // technologies: row.technologies.map(tech => JSON.parse(tech))
     }));
 
     return projects;
@@ -66,7 +66,7 @@ exports.createProject = async (project, userId) => {
       VALUES ($1, $2, $3, $4);
     `, [newProject.id, userId, true, true]);
 
-    newProject.technologies = newProject.technologies.map(tech => JSON.parse(tech));
+    // newProject.technologies = newProject.technologies.map(tech => JSON.parse(tech));
 
     return newProject;
 
@@ -152,7 +152,7 @@ exports.updateProject = async project => {
     `, [title, technologies, description, id]);
 
     updatedProject = rows[0];
-    updatedProject.technologies = updatedProject.technologies.map(tech => JSON.parse(tech));
+    // updatedProject.technologies = updatedProject.technologies.map(tech => JSON.parse(tech));
 
     return updatedProject;
 
