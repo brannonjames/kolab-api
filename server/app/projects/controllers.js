@@ -12,7 +12,7 @@ exports.getProjects = async (req, res, next) => {
     // find all the projects the user hasn't seen before
     // switch to findAllProjects() to get projects without filtering
     let projects = await findAllProjectsNotViewed(req.user.id);
-
+    
     res.send(projects);
 
   } catch (err) {
