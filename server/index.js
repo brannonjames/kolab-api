@@ -1,10 +1,11 @@
 require('dotenv').config()
-const express = require('express');
-const app = express();
+const app = require('express')();
 const bodyParser = require('body-parser');
+
 const PORT = process.env.PORT || 3060;
-const server = app.listen(PORT, () => console.log('KoLab server running on port ', PORT))
-const io = require('socket.io')(server);
+const server = require('http').createServer(app);
+const io = require('socket.io').listen(server);
+
 
 const userRoutes = require('./app/users/routes');
 const projectRoutes = require('./app/projects/routes');
@@ -32,6 +33,6 @@ app.use(error);
 
 
 // Run server
-server.listen();
+server.listen(PORT, () => console.log('server running'));
 
 initializeSocketIo(io);
