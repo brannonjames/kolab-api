@@ -99,25 +99,28 @@ exports.getUser = async id => {
 exports.findUserProjects = async (userId, created) => {
   try {
 
+    // this query will either grab you all the projects the user owns
+    // or all the ones they're collaborating (including the ones owned)
     let { rows } = await pool.query(`
       SELECT project.id, project.title, project.technologies, project.description 
       FROM project
       LEFT OUTER JOIN project_user
       ON project_user.project_id = project.id
       ${
-        created ? 
+        created ?
         'WHERE project_user.owner = TRUE AND project_user.collaborator = TRUE' : 
         'WHERE project_user.collaborator = TRUE'
       }
       AND project_user.user_id = $1;
     `, [userId]);
 
+    // Here I'm parsing the projects technologies which are being stored
+    // as a json string in postgres
     const projects = rows.map(row => ({
       ...row,
       technologies: JSON.parse(row.technologies)
     }));
 
-    console.log(projects);
     return projects;
 
   } catch (err) {

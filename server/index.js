@@ -13,7 +13,7 @@ const { handleAuth } = require('./middleware/auth');
 const notFound = require('./middleware/notFound');
 const error = require('./middleware/error');
 
-const initializeSocketIo = require('./modules/sockets');
+const initializeSocketIo = require('./app/chat/socket');
 
 // middleware
 app.use(bodyParser.json());
@@ -33,6 +33,6 @@ app.use(error);
 
 
 // Run server
-server.listen(PORT, () => console.log('server running'));
+server.listen(PORT, () => console.log('server running on', PORT));
 
 initializeSocketIo(io);

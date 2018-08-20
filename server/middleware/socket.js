@@ -1,8 +1,8 @@
 const jwtAuth = require('socketio-jwt-auth');
 const secret = process.env.JWT_KEY;
 
-const { getUser } = require('../../app/users/queries');
-const { checkCollaboratorStatus } = require('../../app/projects/queries');
+const { getUser } = require('../app/users/queries');
+const { checkCollaboratorStatus } = require('../app/projects/queries');
 
 exports.ensureLoggedIn = jwtAuth.authenticate({ secret: secret }, async (payload, done) => {
   try {
