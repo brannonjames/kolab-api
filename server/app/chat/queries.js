@@ -20,8 +20,10 @@ exports.findMessages = async projectId => {
   try {
 
     let { rows } = await pool.query(`
-      SELECT * FROM message
-      WHERE project_id = $1;
+      SELECT message.id, message.text, message.user_id, "user".username
+      FROM message, "user"
+      WHERE message.user_id = "user".id
+      AND message.project_id = $1;
     `, [projectId]);
 
     return rows;
