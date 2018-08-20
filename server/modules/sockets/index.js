@@ -3,16 +3,14 @@ const { createMessage, findMessages } = require('../../app/chat/queries');
 
 module.exports = io => {
 
-  // io.use(ensureLoggedIn);
-  // io.use(ensureProjectCollaborator);
+  io.use(ensureLoggedIn);
+  io.use(ensureProjectCollaborator);
 
   io.sockets.on('connection', socket => {
-    console.log('connection')
     socket.on('subscribe', ({ room, token }) => {
       try {
 
-        console.log('subscribe');
-
+        console.log('subscribe_successful')
         io.to(room).emit('subscribe_successful');
 
         socket.on('load_initial_messages', async () => {
